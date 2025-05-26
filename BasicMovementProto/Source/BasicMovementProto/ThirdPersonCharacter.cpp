@@ -25,9 +25,10 @@ AThirdPersonCharacter::AThirdPersonCharacter()
     Camera->bUsePawnControlRotation = false;
 
     bUseControllerRotationYaw = false;
-    GetCharacterMovement()->bUseControllerDesiredRotation = false;
-    GetCharacterMovement()->bOrientRotationToMovement = true;
- 
+
+    GetCharacterMovement()->bOrientRotationToMovement = true; 
+    GetCharacterMovement()->RotationRate = FRotator(0.f, 540.f, 0.f); 
+
 }
 
 void AThirdPersonCharacter::BeginPlay()
@@ -40,7 +41,7 @@ void AThirdPersonCharacter::Tick(float DeltaTime)
     Super::Tick(DeltaTime);
 }
 
-void AThirdPersonCharacter::SetupPlayerInputComponent(UInputComponent * PlayerInputComponent)
+void AThirdPersonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
     Super::SetupPlayerInputComponent(PlayerInputComponent);
 
@@ -54,8 +55,7 @@ void AThirdPersonCharacter::MoveForward(float Value)
 {
     if (Controller && Value != 0.f)
     {
-        const FRotator Rotation = Controller->GetControlRotation();
-        const FRotator YawRotation(0, Rotation.Yaw, 0);
+        const FRotator YawRotation(0, Controller->GetControlRotation().Yaw, 0);
         const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
         AddMovementInput(Direction, Value);
     }
@@ -65,8 +65,7 @@ void AThirdPersonCharacter::MoveRight(float Value)
 {
     if (Controller && Value != 0.f)
     {
-        const FRotator Rotation = Controller->GetControlRotation();
-        const FRotator YawRotation(0, Rotation.Yaw, 0);
+        const FRotator YawRotation(0, Controller->GetControlRotation().Yaw, 0);
         const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
         AddMovementInput(Direction, Value);
     }

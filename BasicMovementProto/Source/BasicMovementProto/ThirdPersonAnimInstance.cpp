@@ -15,21 +15,32 @@ void UThirdPersonAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
     if (!OwningCharacter)
     {
         OwningCharacter = Cast<ACharacter>(TryGetPawnOwner());
+        return;
     }
 
-    if (OwningCharacter)
+    FVector Velocity = OwningCharacter->GetVelocity();
+    Speed = Velocity.Size2D();
+    bIsInAir = OwningCharacter->GetCharacterMovement()->IsFalling();
+
+    // Calculate movement direction
+    if (Speed > 0.f)
     {
-        FVector Velocity = OwningCharacter->GetVelocity();
-        FVector Forward = OwningCharacter->GetActorForwardVector();
-        FVector Right = OwningCharacter->GetActorRightVector();
+        FRotator ActorRotation = OwningCharacter->GetActorRotation();
+        FRotator VelocityRotation = Velocity.ToOrientationRotator();
+        FRotator DeltaRot = (VelocityRotation - ActorRotation).GetNormalized();
 
-        Speed = Velocity.Size2D();
+        DirectionX = DeltaRot.Yaw;
 
-        FVector NormalizedVelocity = Velocity.GetSafeNormal2D();
+        // Calculate forward/backward and left/right movement amounts
+        FVector ForwardVector = OwningCharacter->GetActorForwardVector();
+        FVector RightVector = OwningCharacter->GetActorRightVector();
 
-        DirectionX = FVector::DotProduct(NormalizedVelocity, Forward);
-        DirectionY = FVector::DotProduct(NormalizedVelocity, Right);
-
-        bIsInAir = OwningCharacter->GetCharacterMovement()->IsFalling();
+        DirectionX = FVector::DotProduct(Velocity.GetSafeNormal(), ForwardVector);
+        DirectionY = FVector::DotProduct(Velocity.GetSafeNormal(), RightVector);
+    }
+    else
+    {
+        DirectionX = 0.f;
+        DirectionY = 0.f;
     }
 }
