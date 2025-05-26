@@ -1,0 +1,39 @@
+# Игнорировать всё по умолчанию
+/*
+
+# Но не игнорировать эти файлы:
+!.gitignore
+!README.md
+!Source/
+
+# Также можно оставить .uproject, если нужно показывать тип проекта:
+!*.uproject
+
+# Исключить подкаталоги Source, кроме кода
+Source/ThirdParty/
+Source/**/Binaries/
+Source/**/Intermediate/
+Source/**/Saved/
+
+# Игнорировать стандартные UE директории
+/Binaries/
+/DerivedDataCache/
+/Intermediate/
+/Saved/
+/Build/
+/.vscode/
+/.vs/
+/*.sln
+/*.opensdf
+/*.sdf
+/*.suo
+/*.VC.db
+/*.VC.opendb
+/*.log
+*.tmp
+*.user
+*.userprefs
+
+# macOS/Windows системные файлы
+.DS_Store
+Thumbs.db
